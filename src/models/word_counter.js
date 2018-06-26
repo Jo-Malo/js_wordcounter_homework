@@ -5,16 +5,19 @@ const WordCounter = function () {
 }
 
 WordCounter.prototype.bindEvents = function () {
-  PubSub.subscribe('InputView:words-inputted', (evt) => {
+  PubSub.subscribe('SubmitView:words-inputted', (evt) => {
     const inputtedWords = evt.detail;
     console.log(inputtedWords);
     const result = this.numberOfWords(inputtedWords);
+    console.log(result)
     PubSub.publish('WordCounter:result', result);
   })
 };
 
 WordCounter.prototype.numberOfWords = function (str) {
-  return str.split(" ").length;
+  const words = str.split(' ');
+  return words.length;
 };
+// console.log(numberOfWords(" "));
 
 module.exports = WordCounter;

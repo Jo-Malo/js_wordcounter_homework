@@ -15,7 +15,7 @@ ResultView.prototype.updateView = function (result) {
   const resultElement = document.querySelector('#result')
   {
     resultElement.textContent = `Number of words: ${result}`
-  } 
+  }
 };
 
 module.exports = ResultView;

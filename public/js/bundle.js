@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const InputView = __webpack_require__(/*! ./views/input_view */ \"./src/views/input_view.js\");\nconst WordCounter = __webpack_require__(/*! ./models/word_counter */ \"./src/models/word_counter.js\");\nconst ResultView = __webpack_require__(/*! ./views/result_view */ \"./src/views/result_view.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  console.log('JavaScript loaded');\n\n  const inputView = new InputView();\n  inputView.bindEvents();\n\n  const wordCounter = new WordCounter();\n  wordCounter.bindEvents();\n\n  const resultView = new ResultView();\n  resultView.bindEvents();\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
+eval("const SubmitView = __webpack_require__(/*! ./views/input_view */ \"./src/views/input_view.js\");\nconst WordCounter = __webpack_require__(/*! ./models/word_counter */ \"./src/models/word_counter.js\");\nconst ResultView = __webpack_require__(/*! ./views/result_view */ \"./src/views/result_view.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  console.log('JavaScript loaded');\n\n  const submitView = new SubmitView();\n  submitView.bindEvents();\n\n  const wordCounter = new WordCounter();\n  wordCounter.bindEvents();\n\n  const resultView = new ResultView();\n  resultView.bindEvents();\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
 
 /***/ }),
 
@@ -115,7 +115,7 @@ eval("const PubSub = {\n  publish: function(channel, payload) {\n    const event
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst WordCounter = function () {\n\n}\n\nWordCounter.prototype.bindEvents = function () {\n  PubSub.subscribe('InputView:words-inputted', (evt) => {\n    const inputtedWords = evt.detail;\n    console.log(inputtedWords);\n    const result = this.numberOfWords(inputtedWords);\n    PubSub.publish('WordCounter:result', result);\n  })\n};\n\nWordCounter.prototype.numberOfWords = function (str) {\n  return str.split(\" \").length;\n};\n\nmodule.exports = WordCounter;\n\n\n//# sourceURL=webpack:///./src/models/word_counter.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst WordCounter = function () {\n\n}\n\nWordCounter.prototype.bindEvents = function () {\n  PubSub.subscribe('SubmitView:words-inputted', (evt) => {\n    const inputtedWords = evt.detail;\n    console.log(inputtedWords);\n    const result = this.numberOfWords(inputtedWords);\n    console.log(result)\n    PubSub.publish('WordCounter:result', result);\n  })\n};\n\nWordCounter.prototype.numberOfWords = function (str) {\n  const words = str.split(' ');\n  return words.length;\n};\n// console.log(numberOfWords(\" \"));\n\nmodule.exports = WordCounter;\n\n\n//# sourceURL=webpack:///./src/models/word_counter.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/he
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst InputView = function () {\n\n};\n\nInputView.prototype.bindEvents = function () {\n  // talking to the DOM\n  const input = document.querySelector('#wordcounter-form');\n  input.addEventListener('submit', (evt) => {\n    const inputtedWords = evt.target.value;\n    PubSub.publish('InputView:words-inputted', inputtedWords)\n    // console.log('inputted words', inputtedWords);\n  // event.preventDefault();\n  })\n};\n\nmodule.exports = InputView;\n\n\n//# sourceURL=webpack:///./src/views/input_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst SubmitView = function () {\n\n};\n\nSubmitView.prototype.bindEvents = function () {\n  // talking to the DOM\n  const submit = document.querySelector('#wordcounter-form');\n  submit.addEventListener('submit', (evt) => {\n    event.preventDefault();\n    const inputtedWords = evt.target.text.value;\n    PubSub.publish('SubmitView:words-inputted', inputtedWords)\n    // console.log('inputted words', inputtedWords);\n  })\n};\n\nmodule.exports = SubmitView;\n\n\n//# sourceURL=webpack:///./src/views/input_view.js?");
 
 /***/ }),
 
@@ -137,7 +137,7 @@ eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/he
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst ResultView = function () {\n\n};\n\nResultView.prototype.bindEvents = function () {\n  PubSub.subscribe('WordCounter:result', (evt) => {\n    const result = evt.detail;\n    this.updateView(result);\n  })\n};\n\nResultView.prototype.updateView = function (result) {\n  const resultElement = document.querySelector('#result')\n  {\n    resultElement.textContent = `Number of words: ${result}`\n  } \n};\n\nmodule.exports = ResultView;\n\n\n//# sourceURL=webpack:///./src/views/result_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst ResultView = function () {\n\n};\n\nResultView.prototype.bindEvents = function () {\n  PubSub.subscribe('WordCounter:result', (evt) => {\n    const result = evt.detail;\n    this.updateView(result);\n  })\n};\n\nResultView.prototype.updateView = function (result) {\n  const resultElement = document.querySelector('#result')\n  {\n    resultElement.textContent = `Number of words: ${result}`\n  }\n};\n\nmodule.exports = ResultView;\n\n\n//# sourceURL=webpack:///./src/views/result_view.js?");
 
 /***/ })
 
